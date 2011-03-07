@@ -1,0 +1,5 @@
+﻿RewriteEngine on
+RewriteBase /
+
+RewriteCond %{HTTP_HOST} ^www\.daringfireball\.net$
+RewriteRule (.*) http://daringfireball.net/$1 [R=Permanent]
