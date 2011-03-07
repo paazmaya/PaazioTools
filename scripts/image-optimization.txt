@@ -1,0 +1,5 @@
+pngcrush -rem alla -brute -reduce src.png dest.png
+
+jpegtran -copy none -optimize src.jpg dest.jpg
+
+convert image.gif PNG8:image.png

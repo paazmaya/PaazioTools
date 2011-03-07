@@ -1,0 +1,7 @@
+# Delete trailing whitespace (tabs and spaces) from each line.
+sed 's/[ \t]*$//'
+
+# Substitute (find and replace) all occurrence of “foo” with “bar” on each line.
+sed 's/foo/bar/g'
+
+
