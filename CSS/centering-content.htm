@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Centering content</title>
+	<style type="text/css">
+	* {
+		margin: 0px;
+		padding: 0px;
+	}
+	body {
+		background-color: #668822;
+		/* MS IE 5 hack to center fixed width content */
+		text-align: center;
+		/* Specify a min-width for the body as wide as the 'wrapper'
+		element itself. This prevents negative (i.e. inaccessible)
+		left-margins in narrow browser windows when using 
+		Navigator 6+/Mozilla on Win32: */
+		min-width: 700px;
+
+	}
+	div {
+		border: 1px solid Black;
+		background-color: #F4F4F4;
+		display: block;
+	}
+	#way1 {
+		position: absolute;
+		left: 50%;
+		width: 700px;
+		margin-top: 80px;
+		margin-left: -350px;
+	}
+	#way2 {
+		width: 700px;
+		margin-left: auto;
+		margin-right: auto;
+		/* MS IE 5 hack to center fixed width content */
+		text-align: left;
+	}
+	</style>
+</head>
+<body>
+	<div id="way1">
+		<p>Width of this is 700 pixels, positioned absolutely.</p>
+		<p>When the left margin is set to negative half of the width, thus -350px and left value is set to 50%, it is centered.</p>
+		<p>Top margin is only to display it lower than the other box, due to the absolute positioning.</p>
+	</div>
+	<div id="way2">
+		<p>From http://bluerobot.com/web/css/center1.html</p>
+		<p>Width of this is 700 pixels.</p>
+		<p>Left and right margins are set to auto.</p>
+	</div>
+</body>
+</html>
