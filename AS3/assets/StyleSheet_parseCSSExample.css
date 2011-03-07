@@ -1,0 +1,14 @@
+﻿p {
+	font-family: Times New Roman, Times, _serif;
+	font-size: 14;
+	font-Style: italic;
+	margin-left: 10;
+}
+h1 {
+	font-family: Arial, Helvetica, _sans;
+	font-size: 20;
+	font-weight: bold;
+}
+.bluetext {
+	color: #0000CC;
+}

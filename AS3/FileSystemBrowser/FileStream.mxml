@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+    layout="absolute" creationComplete="init()" width="808" height="484"
+    backgroundGradientColors="[#FFFFFF, #5df098]">
+
+    <mx:Script>
+    <![CDATA[
+   
+    import flash.filesystem.*;
+   
+    private var stream:FileStream;
+   
+    private function init():void{
+        var file:File = File.desktopDirectory.resolvePath("Files/sample.txt");
+        var stream:FileStream = new FileStream()
+        stream.open(file, FileMode.WRITE);
+        var str:String = "This is a sample file"; 
+        stream.writeUTFBytes(str);
+        stream.close();
+        fdg.directory = File.desktopDirectory.resolvePath("Files/");
+    }
+   
+    private function saveFile():void{
+        var myPattern:RegExp = / /g; 
+        var newFileName:String = fileName.text.replace('.txt','');
+        if(newFileName.length > 1){
+            var file:File = File.desktopDirectory.resolvePath("Files/" + newFileName.replace(myPattern,'_') + ".txt");
+            var stream:FileStream = new FileStream()
+            stream.open(file, FileMode.WRITE);
+            var str:String = contents.text;
+            str = str.replace(/\r/g, File.lineEnding);
+            stream.writeUTFBytes(str);
+            stream.close();
+            fdg.directory = File.desktopDirectory.resolvePath("Files/");
+            fileName.text = "";
+            contents.text = "";
+          } else {
+              mx.controls.Alert.show("File name is required", "Error Saving File");
+          }
+    }
+   
+    private function loadFile():void{
+        var file:File = File.desktopDirectory.resolvePath("Files/" + fdg.selectedItem.name);;               
+        stream = new FileStream();
+        stream.open(file, FileMode.READ);
+        var str:String = stream.readUTFBytes(stream.bytesAvailable);
+        stream.close();
+        str = str.replace(File.lineEnding, "\n");
+        contents.text = str;
+        fileName.text = file.name;       
+    }
+   
+    ]]>
+    </mx:Script>
+    <mx:FileSystemDataGrid x="93" y="26" width="700" height="225" id="fdg" change="loadFile()"/>
+    <mx:Label text="File name:" x="18" y="261" fontWeight="bold"/>
+    <mx:Label x="19" y="301" text="Contents:" fontWeight="bold"/>
+    <mx:TextInput x="89" y="259" id="fileName"/>
+    <mx:TextArea x="89" y="300" id="contents" width="629" height="156"/>
+    <mx:Label x="10" y="27" text="Current Files" fontWeight="bold"/>
+    <mx:Button x="726" y="432" label="Save" click="saveFile()" icon="@Embed('assets/images/Save_icon.gif')"/>
+
+</mx:WindowedApplication>

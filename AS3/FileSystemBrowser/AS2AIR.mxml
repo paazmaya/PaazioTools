@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<app:AS2AIR
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:app="hoplaa.*"
+    initialize="init();" width="800" height="600"
+    layout="absolute" xmlns:ns1="*">
+
+<mx:SWFLoader id="swf" scaleContent="false" width="100%" height="100%" x="0" y="0"/>
+   
+</app:AS2AIR>

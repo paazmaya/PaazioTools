@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+    layout="absolute" width="568" height="375">
+    <mx:FileSystemDataGrid width="555" height="154" x="6" y="7"
+    directory="{File.desktopDirectory.resolvePath('')}" />
+    <mx:FileSystemComboBox x="10" y="169"
+    directory="{File.desktopDirectory.resolvePath('')}"/>
+    <mx:FileSystemTree x="10" y="199" width="291"
+    directory="{File.desktopDirectory.resolvePath('')}"/>
+    <mx:FileSystemList x="309" y="169"
+    directory="{File.desktopDirectory.resolvePath('')}"/>
+</mx:WindowedApplication>

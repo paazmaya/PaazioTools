@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<app:App
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:app="org.paazio.*"
+    layout="vertical"
+    width="300" height="375"
+    backgroundGradientAlphas="[1.0, 1.0]"
+    backgroundGradientColors="[#F4F4F4, #E0E0E0]"
+    paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+    verticalScrollPolicy="off" horizontalScrollPolicy="off">
+
+    <mx:VBox id="files_vb"
+        width="100%" height="300"
+        backgroundColor="#FFFFFF"
+        horizontalScrollPolicy="off"
+        paddingBottom="5″ paddingLeft="5″ paddingRight="5″ paddingTop="5" borderColor="#ABABAB" borderStyle="inset">
+    </mx:VBox>
+
+    <mx:Button id="upload_btn" label="Upload Files"/>
+
+</app:App>

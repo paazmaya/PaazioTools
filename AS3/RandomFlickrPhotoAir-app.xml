@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/1.5">
+	<id>RandomFlickrPhotoAir</id>
+	<version>0.1</version>
+	<filename>RandomFlickrPhotoAir</filename>
+	<name>Random Flickr Photo</name>
+	<description>A small 3x3 grid displaying a random Flickr photo from Juga Paazmaya's photosets.</description>
+	<copyright>Copyright (c) 2009 Juga Paazmaya</copyright>
+	<initialWindow>
+		<content>RandomFlickrPhotoAir.swf</content>
+		<height>225</height>
+		<maximizable>false</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>false</resizable>
+		<systemChrome>standard</systemChrome>
+		<transparent>false</transparent>
+		<visible>true</visible>
+		<width>225</width>
+	</initialWindow>
+	<!--
+	<icon>
+		<image16x16>icons/smallIcon.png</image16x16>
+		<image32x32>icons/mediumIcon.png</image32x32>
+		<image48x48>icons/bigIcon.png</image48x48>
+		<image128x128>icons/biggestIcon.png</image128x128>
+	</icon>
+	-->
+</application>
+
+<!--
+adt –certificate -cn JugaPaazmaya 1024-RSA paazmaya.pfx paazmaya
+adt -package -storetype pkcs12 -keystore paazmaya.pfx RandomFlickrPhotoAir.air RandomFlickrPhotoAir-app.xml RandomFlickrPhotoAir.swf
+-->

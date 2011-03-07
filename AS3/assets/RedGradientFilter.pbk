@@ -1,0 +1,26 @@
+<languageVersion : 1.0;>
+
+kernel RedGradientFilter
+<
+    namespace: "Adobe::Example";
+    vendor: "Adobe examples";
+    version: 1;
+    description: "Applies a gradient across the red channel of the input image.";
+>
+{
+    input image4 src;
+    output pixel4 dst;
+
+    parameter float width
+    <
+        description: "The width of the image to which the shader is applied.";
+        minValue: 0.0;
+    >;
+
+    void evaluatePixel()
+    {
+        pixel4 temp = sampleNearest(src, outCoord());
+        temp.r = 1.0 - (outCoord().x * (1.0 / width));
+        dst = temp;
+    }
+}

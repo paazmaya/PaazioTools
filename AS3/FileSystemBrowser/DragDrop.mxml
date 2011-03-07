@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+  creationComplete="init()">
+   
+    <mx:Script>
+      <![CDATA[
+        import mx.controls.Alert;
+        import mx.controls.Image;
+        import flash.filesystem.File;
+
+        private function init():void{
+          this.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER,onDragIn);
+          this.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP,onDrop);
+        }
+
+        private function onDragIn(event:NativeDragEvent):void{
+          NativeDragManager.acceptDragDrop(this);
+        }
+
+        private function onDrop(event:NativeDragEvent):void{
+          var dropfiles:Array = event.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+          for each (var file:File in dropfiles){
+            switch (file.extension.toLowerCase()){   
+              case "png" :
+                addImage(file.nativePath);
+                    break;
+              case "jpg" :
+                addImage(file.nativePath);
+                break;
+              case "jpeg" :
+                addImage(file.nativePath);
+                break;
+              case "gif" :
+                addImage(file.nativePath);
+                break;
+              default:
+                Alert.show("Unmapped Extension");
+              }
+            }
+          }
+
+          private function addImage(nativePath:String):void{
+            var i:Image = new Image();
+            if(Capabilities.os.search("Mac") >= 0){
+              i.source = "file://" + nativePath;
+            } else {
+              i.source = nativePath;
+            }
+            this.addChild(i);
+          }
+
+        ]]>
+    </mx:Script>
+   
+</mx:WindowedApplication>

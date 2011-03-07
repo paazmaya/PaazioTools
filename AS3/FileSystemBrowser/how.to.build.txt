@@ -1,0 +1,9 @@
+
+c:\flex_sdk_3.0.0.866_mpl\bin\amxmlc.bat FileSystemBrowser.mxml
+
+c:\AdobeAIRSDK\bin\adl.exe FileSystemBrowser-app.xml
+
+c:\AdobeAIRSDK\bin\adt.bat -certificate -cn "MeIsDoIt" 2048-RSA MeIsDoIt.pfx hoplaa
+
+c:\AdobeAIRSDK\bin\adt.bat -package -storetype pkcs12 -keystore MeIsDoIt.pfx FileSystemBrowser.air FileSystemBrowser-app.xml FileSystemBrowser.swf
+
