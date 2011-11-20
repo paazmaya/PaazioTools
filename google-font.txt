@@ -1,0 +1,5 @@
+http://www.google.com/webfonts/family?family=Luckiest+Guy&subset=latin#code
+
+<link href='http://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
+
+h1 { font-family: 'Luckiest Guy', arial, serif; }
