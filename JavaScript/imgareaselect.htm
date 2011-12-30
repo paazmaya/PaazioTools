@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Image Area Select</title>
+		
+		<link rel="stylesheet" href="https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/imgareaselect-default.css" type="text/css" media="all" />
+		<style>
+			#namingtool {
+				display: none;
+				width: 10em;
+				height: auto;
+				border: 1px solid black;
+				padding: 0.3em;
+				margin: 0;
+				position: absolute;
+				z-index: 123456;
+			}
+			.note {
+				background-color: transparent;
+				position: absolute;
+			}
+			.note:hover .notetext, .notehover .notetext {
+				display: inline;
+			}
+			.note:hover .notearea, .notehover .notearea {
+				opacity: 1.0;
+			}
+			.notearea {
+				opacity: 0.4;
+				border: 2px solid orange;
+				border-radius: 6px;
+				background-color: transparent;
+				display: block;
+			}
+			.notetext {
+				color: orange;
+				border-radius: 6px;
+				background-color: white;
+				display: none;
+				padding: 2px;
+				margin-top: -6px;
+				text-align: center;
+			}
+		</style>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+					<th>Image</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr rel="tr1">
+					<td><img src="http://farm3.staticflickr.com/2080/2449221582_8058f02aa4_d.jpg" alt="Wet shirt" /></td>
+					<td></td>
+                </tr>
+                <tr rel="tr2">
+					<td><img src="http://farm3.staticflickr.com/2322/2448420129_002da2d304_d.jpg" alt="Sleepyheads" /></td>
+					<td></td>
+                </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li data-x1="343" data-y1="260" data-x2="375" data-y2="301" data-note="nenä" data-width="32" data-height="41" data-url="http://farm3.staticflickr.com/2322/2448420129_002da2d304_d.jpg">nose</li>
+            <li>tail</li>
+        </ul>
+		<input type="text" id="namingtool" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+        <script src="https://raw.github.com/odyniec/imgareaselect/master/jquery.imgareaselect.dev.js"></script>
+        <script>
+			// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/JSON
+			
+			$(document).ready(function () {
+			
+				$('img').imgAreaSelect({ 
+					maxWidth: 200,
+					maxHeight: 150, 
+					handles: true,
+					autoHide: false,
+					persistent: false,
+					onSelectEnd: function (img, sel) {
+						console.log('onSelectEnd. img: ' + img.src);
+						console.log('onSelectEnd. sel {x1: ' + sel.x1 + ', y1: ' + sel.y1 + ', x2: ' + sel.x2 + ', y2: ' + sel.y2 + '}');
+                        // check the size
+                        if (sel.height > areaNote.sizeLimit && sel.width > areaNote.sizeLimit) {
+                            areaNote.showField(img, sel);
+                        }
+					}
+				});
+				
+				$('#namingtool').keyup(function(event) {
+					// 13 = enter
+					if (event.which == 13) {
+						areaNote.saveSelectionNote($(this));
+					}
+				});
+				
+				areaNote.loadLocalStorage();
+                
+                var noseData = $('li:contains("nose")').data();
+                if (noseData) {
+                    areaNote.showNote(noseData);
+                }
+                /*
+                $('li').on('mouseover', function() {
+                    var text = $(this).text();
+                    var data = $(this).data();
+                    if (data.url) {
+                        $('img[src="' + data.url + '"]').parent().children('div.note:contains("' + text + '")').addClass('notehover');
+                    }
+                })
+                .on('mouseout', function() {
+                    var text = $(this).text();
+                    var data = $(this).data();
+                    if (data.url) {
+                        $('img[src="' + data.url + '"]').parent().children('div.note:contains("' + text + '")').removeClass('notehover');
+                    }
+                });
+                */
+                
+                $('li').on('mouseover mouseout', function(event) {
+                    var text = $(this).text();
+                    var data = $(this).data();
+                    
+                    if (data.url && data.note) {
+                        var div =  $('img[src="' + data.url + '"]').parent().children('div.note:contains("' + data.note + '")');
+                        if (event.type == 'mouseover') {
+                            div.addClass('notehover');
+                        }
+                        else {
+                            div.removeClass('notehover');
+                        }
+                    }
+                });
+			});
+			
+			var areaNote = {
+                
+                sizeLimit: 10, // pixels per side
+				
+                areas: [],
+                
+                showField: function(img, sel) {
+                    var pos = $(img).position();
+                    var field = $('#namingtool');
+                    var nx = pos.left + (sel.width - field.width()) / 2 + sel.x1;
+                    var ny = pos.top + (sel.height - field.height()) / 2 + sel.y1;
+                    field.css('left', nx).css('top', ny).slideDown(200).attr('rel', img.src).data(sel).focus();
+                },
+                
+				saveSelectionNote: function($field) {
+					console.log('saveSelectionNote.');
+					var rel = $field.attr('rel');
+					var text = $field.val();
+					var img = $('img[src="' + rel + '"]');
+					img.data('imgAreaSelect').cancelSelection();
+					$field.attr('selection', null).attr('rel', null).val(null).slideUp(200);
+					
+					var data = $field.data();
+					data.note = text; // TODO: perhaps escapesome, but as PHP htmlentities()
+					data.url = rel;
+					areaNote.areas.push(data);
+					
+					areaNote.saveLocalStorage(); // or trigger separately
+					
+					areaNote.insertToTable(data);
+					areaNote.showNote(data);
+				},
+				
+				/**
+				 * Save the current data to localStorage as a JSON string.
+				 */
+				saveLocalStorage: function () {
+					console.log('saveLocalStorage.');
+					var jsonstring = JSON.stringify(areaNote.areas);
+					localStorage.setItem('areas', jsonstring);
+				},
+				
+				/**
+				 * Load and show the data from localStorage if available.
+				 */
+				loadLocalStorage: function () {
+					console.log('loadLocalStorage.');
+					var jsonstring = localStorage.getItem('areas');
+					console.log('loadLocalStorage. jsonstring: ' + jsonstring);
+					if (jsonstring) {
+						areaNote.areas = JSON.parse(jsonstring);
+					}
+					var len = areaNote.areas.length;
+					for (var i = 0; i < len; i++) {
+						var area = areaNote.areas[i];
+						areaNote.showNote(area);
+						areaNote.insertToTable(area);
+					}
+				},
+				
+				/**
+				 * data = {x1, x2, y1, y2, width, heigth, note, url}
+				 */
+				showNote: function(data) {
+					console.log('showNote.');
+					var parent = $('img[src="' + data.url + '"]').parent();
+					var div = $('<div class="note"></div>');
+					var tpo = parent.position();
+					div.css('left', data.x1 + tpo.left).css('top', data.y1 + tpo.top);
+					var area = $('<span class="notearea"></span>');
+					var note = $('<span class="notetext">' + data.note + '</span>');
+					area.css('width', data.width).css('height', data.height);
+					div.append(area, note);
+					parent.append(div).show(400);
+				},
+				
+				/**
+				 * data = {x1, x2, y1, y2, width, heigth, note, url}
+				 */
+				insertToTable: function(data) {
+					console.log('insertToTable.');
+					var img = $('img[src="' + data.url + '"]');
+					var tr = img.parents('tr');
+					var jsonstring = JSON.stringify(data);
+					tr.children('td').first().next().append(jsonstring + '<br>');
+				}
+			};
+			
+        </script>
+    </body>
+</html> 
