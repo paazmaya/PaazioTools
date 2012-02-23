@@ -4,8 +4,50 @@
         <meta charset="UTF-8">
         <title>Image Area Select</title>
 		
-		<link rel="stylesheet" href="https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/imgareaselect-default.css" type="text/css" media="all" />
 		<style>
+			/*
+			 * imgAreaSelect default style
+			 */
+
+			.imgareaselect-border1 {
+				background: url(https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/border-v.gif) repeat-y left top;
+			}
+
+			.imgareaselect-border2 {
+				background: url(https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/border-h.gif) repeat-x left top;
+			}
+
+			.imgareaselect-border3 {
+				background: url(https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/border-v.gif) repeat-y right top;
+			}
+
+			.imgareaselect-border4 {
+				background: url(https://raw.github.com/odyniec/imgareaselect/master/distfiles/css/border-h.gif) repeat-x left bottom;
+			}
+
+			.imgareaselect-border1, .imgareaselect-border2,
+			.imgareaselect-border3, .imgareaselect-border4 {
+				filter: alpha(opacity=50);
+				opacity: 0.5;
+			}
+
+			.imgareaselect-handle {
+				background-color: #fff;
+				border: solid 1px #000;
+				filter: alpha(opacity=50);
+				opacity: 0.5;
+			}
+
+			.imgareaselect-outer {
+				background-color: #000;
+				filter: alpha(opacity=50);
+				opacity: 0.5;
+			}
+
+			.imgareaselect-selection {  
+			}
+			
+			
 			#namingtool {
 				display: none;
 				width: 10em;
@@ -64,7 +106,7 @@
             </tbody>
         </table>
         <ul>
-            <li data-x1="343" data-y1="260" data-x2="375" data-y2="301" data-note="nenä" data-width="32" data-height="41" data-url="http://farm3.staticflickr.com/2322/2448420129_002da2d304_d.jpg">nose</li>
+            <li data-x="343" data-y="260" data-note="nenä" data-width="32" data-height="41" data-url="http://farm3.staticflickr.com/2322/2448420129_002da2d304_d.jpg">nose</li>
             <li>tail</li>
         </ul>
 		<input type="text" id="namingtool" />
@@ -86,6 +128,13 @@
 						console.log('onSelectEnd. sel {x1: ' + sel.x1 + ', y1: ' + sel.y1 + ', x2: ' + sel.x2 + ', y2: ' + sel.y2 + '}');
                         // check the size
                         if (sel.height > areaNote.sizeLimit && sel.width > areaNote.sizeLimit) {
+						
+							sel.x = sel.x1;
+							sel.y = sel.y1;
+							delete sel.x1;
+							delete sel.y1;
+							delete sel.x2;
+							delete sel.y2;
                             areaNote.showField(img, sel);
                         }
 					}
@@ -146,20 +195,20 @@
                 showField: function(img, sel) {
                     var pos = $(img).position();
                     var field = $('#namingtool');
-                    var nx = pos.left + (sel.width - field.width()) / 2 + sel.x1;
-                    var ny = pos.top + (sel.height - field.height()) / 2 + sel.y1;
-                    field.css('left', nx).css('top', ny).slideDown(200).attr('rel', img.src).data(sel).focus();
+                    var nx = pos.left + (sel.width - field.width()) / 2 + sel.x;
+                    var ny = pos.top + (sel.height - field.height()) / 2 + sel.y;
+                    field.css('left', nx).css('top', ny).slideDown(200).data('image', img.src).data('selection', sel).focus();
                 },
                 
 				saveSelectionNote: function($field) {
 					console.log('saveSelectionNote.');
-					var rel = $field.attr('rel');
+					var rel = $field.data('image');
 					var text = $field.val();
 					var img = $('img[src="' + rel + '"]');
 					img.data('imgAreaSelect').cancelSelection();
-					$field.attr('selection', null).attr('rel', null).val(null).slideUp(200);
+					$field.attr('selection', null).data('image', null).val(null).slideUp(200);
 					
-					var data = $field.data();
+					var data = $field.data('selection');
 					data.note = text; // TODO: perhaps escapesome, but as PHP htmlentities()
 					data.url = rel;
 					areaNote.areas.push(data);
@@ -198,23 +247,25 @@
 				},
 				
 				/**
-				 * data = {x1, x2, y1, y2, width, heigth, note, url}
+				 * data = {x, y, width, heigth, note, url}
 				 */
 				showNote: function(data) {
-					console.log('showNote.');
+					console.group('showNote');
+					console.dir(data);
 					var parent = $('img[src="' + data.url + '"]').parent();
 					var div = $('<div class="note"></div>');
 					var tpo = parent.position();
-					div.css('left', data.x1 + tpo.left).css('top', data.y1 + tpo.top);
+					div.css('left', data.x + tpo.left).css('top', data.y + tpo.top);
 					var area = $('<span class="notearea"></span>');
 					var note = $('<span class="notetext">' + data.note + '</span>');
 					area.css('width', data.width).css('height', data.height);
 					div.append(area, note);
 					parent.append(div).show(400);
+					console.groupEnd();
 				},
 				
 				/**
-				 * data = {x1, x2, y1, y2, width, heigth, note, url}
+				 * data = {x, y, width, heigth, note, url}
 				 */
 				insertToTable: function(data) {
 					console.log('insertToTable.');
