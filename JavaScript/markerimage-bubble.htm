@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>MarkerImage troubles with Charts bubble image</title>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<style>
+		#map {
+			width: 300px;
+			height: 300px;
+		}
+		p, #map { float: left; margin: 10px; }
+	</style>
+
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.1&amp;sensor=false&amp;language=ja"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		var map;
+		var markers = [];
+		
+		// http://code.google.com/apis/chart/docs/gallery/dynamic_icons.html#pins
+		
+		// http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_star|glyphish_compass|F9FBF7|ADDE63
+		// http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sright|glyphish_compass|F9FBF7|ADDE63
+		// http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small&chld=glyphish_paperclip|bbtl|Select+position|B7B529|05050D
+		var createMarkerImage = function() {
+			// MarkerImage(url:string, size?:Size, origin?:Point, anchor?:Point, scaledSize?:Size)
+			var base = 'http://chart.apis.google.com/chart?';
+			var pin = 'chst=' + $('select[name=pin]').val();
+			var icon = 'chld=' + $('select[name=icon]').val();
+			var url = [pin, icon].join('&');
+			
+			var size = new google.maps.Size($('input[name=sizew]').val(), $('input[name=sizeh]').val());
+			var origin = new google.maps.Point($('input[name=originx]').val(), $('input[name=originy]').val());
+			var anchor = new google.maps.Point($('input[name=anchorx]').val(), $('input[name=anchory]').val());
+			
+			console.log('createMarkerImage. pin: ' + pin + ', icon: ' + icon);
+			console.log('createMarkerImage. size: ' + size + ', origin: ' + origin + ' , anchor: ' + anchor);
+			
+			var markerImage = new google.maps.MarkerImage(base + url, size, origin, anchor, size);
+			
+			return markerImage;
+		};
+		
+		var createMarker = function(pos, title, icon) {
+			var marker = new google.maps.Marker({
+				position: pos,
+				title: title,
+				map: map,
+				draggable: false,
+				icon: icon
+			});
+			return marker;
+		};
+
+		$(document).ready(function() {
+			// http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions
+			var opts = {
+				center: new google.maps.LatLng(35.2765, 136.2526),
+				mapTypeId: google.maps.MapTypeId.TERRAIN,
+				mapTypeControl: true,
+				mapTypeControlOptions: {
+					position: google.maps.ControlPosition.TOP_LEFT,
+					style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+				},
+				navigationControl: true,
+				navigationControlOptions: {
+					position: google.maps.ControlPosition.TOP_LEFT,
+					style: google.maps.NavigationControlStyle.SMALL
+				},
+				scaleControl: true,
+				scaleControlOptions: {
+					position: google.maps.ControlPosition.BOTTOM,
+					style: google.maps.ScaleControlStyle.DEFAULT
+				},
+				zoom: 7
+			};
+
+			map = new google.maps.Map($('#map').get(0), opts);
+
+
+			$('input[name], select').change(function() {
+				var val = $(this).val();
+				var name = $(this).attr('name');
+				console.log('change. name:' + name + ', value: ' + val);
+				
+				// Remove first marker
+				if (markers.length > 2) {
+					var rm = markers[0];
+					rm.setMap(null);
+				}
+				
+				var img = createMarkerImage();
+				var lat = Math.random() * 5 + 32.5;
+				var lng = Math.random() * 5 + 133.5;
+				console.log('change. lat:' + lat + ', lng: ' + lng);
+				var marker = createMarker(
+					new google.maps.LatLng(lat, lng),
+					'marker',
+					img
+				);
+				markers.push(marker);
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="map"></div>
+	<!--
+	<p><img src="http://maps.google.com/maps/api/staticmap?maptype=terrain&language=ja&format=png8&sensor=false&zoom=9&center=35.2765,136.2526&size=300x300&markers=color:0x55FF55|label:0|35.0,136.0&markers=color:0xFFFF55|label:1|35.1,136.1&markers=color:0x5555FF|label:3|35.3,136.3&markers=color:0xFF5555|label:2|35.2,136.2" /></p>
+	-->
+	<p>
+		Bubble marker settings<br />
+		anchor x: <input type="text" name="anchorx" value="0" /><br />
+		anchor y: <input type="text" name="anchory" value="0" /><br />
+		origin x: <input type="text" name="originx" value="0" /><br />
+		origin y: <input type="text" name="originy" value="0" /><br />
+		size width: <input type="text" name="sizew" value="41" /><br />
+		size height: <input type="text" name="sizeh" value="42" /><br />
+		pin type: <select name="pin">
+			<option value="d_bubble_icon_text_small">d_bubble_icon_text_small</option>
+			<option value="d_map_pin_letter">d_map_pin_letter</option>
+			<option value="d_map_pin_icon">d_map_pin_icon</option>
+			<option value=""></option>
+			<option value=""></option>
+			<option value=""></option>
+			<option value=""></option>
+		</select><br />
+		icon:  <select name="icon">
+			<option value="glyphish_paperclip">glyphish_paperclip</option>
+			<option value="pin_star|glyphish_compass|F9FBF7|ADDE63">pin_star|glyphish_compass|F9FBF7|ADDE63</option>
+			<option value=""></option>
+			<option value=""></option>
+			<option value=""></option>
+		</select><br />
+	</p>
+</body>
+</html>
