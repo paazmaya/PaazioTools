@@ -61,6 +61,7 @@
 			.note {
 				background-color: transparent;
 				position: absolute;
+				text-align: center;
 			}
 			.note:hover .notetext, .notehover .notetext {
 				display: inline;
@@ -80,7 +81,7 @@
 				border-radius: 6px;
 				background-color: white;
 				display: none;
-				padding: 2px;
+				padding: 2px 4px;
 				margin-top: -6px;
 				text-align: center;
 			}
@@ -96,7 +97,7 @@
             </thead>
             <tbody>
                 <tr rel="tr1">
-					<td><img src="http://farm3.staticflickr.com/2080/2449221582_8058f02aa4_d.jpg" alt="Wet shirt" /></td>
+					<td><img src="http://naginata.fi/img/naginata-bogu-chudan-artwork-lecklin.png" alt="Bogu" /></td>
 					<td></td>
                 </tr>
                 <tr rel="tr2">
@@ -107,16 +108,17 @@
         </table>
         <ul>
             <li data-x="343" data-y="260" data-note="nenä" data-width="32" data-height="41" data-url="http://farm3.staticflickr.com/2322/2448420129_002da2d304_d.jpg">nose</li>
-            <li>tail</li>
         </ul>
 		<input type="text" id="namingtool" />
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
         <script src="https://raw.github.com/odyniec/imgareaselect/master/jquery.imgareaselect.dev.js"></script>
         <script>
 			// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/JSON
+			// https://developer.mozilla.org/en/DOM/Storage
 			
 			$(document).ready(function () {
-			
+				//localStorage.clear(); // clear for testing
+				
 				$('img').imgAreaSelect({ 
 					maxWidth: 200,
 					maxHeight: 150, 
@@ -129,12 +131,14 @@
                         // check the size
                         if (sel.height > areaNote.sizeLimit && sel.width > areaNote.sizeLimit) {
 						
+							// Clean the data object
 							sel.x = sel.x1;
 							sel.y = sel.y1;
 							delete sel.x1;
 							delete sel.y1;
 							delete sel.x2;
 							delete sel.y2;
+							
                             areaNote.showField(img, sel);
                         }
 					}
@@ -153,22 +157,6 @@
                 if (noseData) {
                     areaNote.showNote(noseData);
                 }
-                /*
-                $('li').on('mouseover', function() {
-                    var text = $(this).text();
-                    var data = $(this).data();
-                    if (data.url) {
-                        $('img[src="' + data.url + '"]').parent().children('div.note:contains("' + text + '")').addClass('notehover');
-                    }
-                })
-                .on('mouseout', function() {
-                    var text = $(this).text();
-                    var data = $(this).data();
-                    if (data.url) {
-                        $('img[src="' + data.url + '"]').parent().children('div.note:contains("' + text + '")').removeClass('notehover');
-                    }
-                });
-                */
                 
                 $('li').on('mouseover mouseout', function(event) {
                     var text = $(this).text();
@@ -253,6 +241,10 @@
 					console.group('showNote');
 					console.dir(data);
 					var parent = $('img[src="' + data.url + '"]').parent();
+					if (parent.size() == 0) {
+						console.log('failed to showNote for url: ' + data.url);
+						return false;
+					}
 					var div = $('<div class="note"></div>');
 					var tpo = parent.position();
 					div.css('left', data.x + tpo.left).css('top', data.y + tpo.top);
@@ -271,8 +263,17 @@
 					console.log('insertToTable.');
 					var img = $('img[src="' + data.url + '"]');
 					var tr = img.parents('tr');
-					var jsonstring = JSON.stringify(data);
-					tr.children('td').first().next().append(jsonstring + '<br>');
+					
+					//var jsonstring = JSON.stringify(data);
+					//tr.children('td').first().next().append(jsonstring + '<br>');
+					
+					var markup = [];
+					for (var i in data) {
+						if (data.hasOwnProperty(i)) {
+							markup.push('data-' + i + '="' + data[i] + '"');
+						}
+					}
+					tr.children('td').first().next().append(markup.join(' ') + '<br>');
 				}
 			};
 			
