@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<title>MarkerImage troubles with Charts bubble image</title>
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<meta name=""viewport" content="initial-scale=1.0, user-scalable=no" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<style>
@@ -13,47 +13,16 @@
 		p, #map { float: left; margin: 10px; }
 	</style>
 
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.1&amp;sensor=false&amp;language=ja"></script>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.7&amp;sensor=false&amp;language=ja"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
 	<script type="text/javascript">
-		var map;
-		var markers = [];
 		
 		// http://code.google.com/apis/chart/docs/gallery/dynamic_icons.html#pins
 		
 		// http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_star|glyphish_compass|F9FBF7|ADDE63
 		// http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sright|glyphish_compass|F9FBF7|ADDE63
 		// http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small&chld=glyphish_paperclip|bbtl|Select+position|B7B529|05050D
-		var createMarkerImage = function() {
-			// MarkerImage(url:string, size?:Size, origin?:Point, anchor?:Point, scaledSize?:Size)
-			var base = 'http://chart.apis.google.com/chart?';
-			var pin = 'chst=' + $('select[name=pin]').val();
-			var icon = 'chld=' + $('select[name=icon]').val();
-			var url = [pin, icon].join('&');
-			
-			var size = new google.maps.Size($('input[name=sizew]').val(), $('input[name=sizeh]').val());
-			var origin = new google.maps.Point($('input[name=originx]').val(), $('input[name=originy]').val());
-			var anchor = new google.maps.Point($('input[name=anchorx]').val(), $('input[name=anchory]').val());
-			
-			console.log('createMarkerImage. pin: ' + pin + ', icon: ' + icon);
-			console.log('createMarkerImage. size: ' + size + ', origin: ' + origin + ' , anchor: ' + anchor);
-			
-			var markerImage = new google.maps.MarkerImage(base + url, size, origin, anchor, size);
-			
-			return markerImage;
-		};
-		
-		var createMarker = function(pos, title, icon) {
-			var marker = new google.maps.Marker({
-				position: pos,
-				title: title,
-				map: map,
-				draggable: false,
-				icon: icon
-			});
-			return marker;
-		};
 
 		$(document).ready(function() {
 			// http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions
@@ -78,7 +47,7 @@
 				zoom: 7
 			};
 
-			map = new google.maps.Map($('#map').get(0), opts);
+			mapGoogle.map = new google.maps.Map($('#map').get(0), opts);
 
 
 			$('input[name], select').change(function() {
@@ -87,23 +56,57 @@
 				console.log('change. name:' + name + ', value: ' + val);
 				
 				// Remove first marker
-				if (markers.length > 2) {
-					var rm = markers[0];
+				if (mapGoogle.markers.length > 2) {
+					var rm = mapGoogle.markers[0];
 					rm.setMap(null);
 				}
 				
-				var img = createMarkerImage();
+				var img = mapGoogle.createMarkerImage();
 				var lat = Math.random() * 5 + 32.5;
 				var lng = Math.random() * 5 + 133.5;
 				console.log('change. lat:' + lat + ', lng: ' + lng);
-				var marker = createMarker(
+				var marker = mapGoogle.createMarker(
 					new google.maps.LatLng(lat, lng),
 					'marker',
 					img
 				);
-				markers.push(marker);
+				mapGoogle.markers.push(marker);
 			});
 		});
+		var mapGoogle = {
+			map: null,
+			markers: [],
+			
+			createMarker: function(pos, title, icon) {
+				var marker = new google.maps.Marker({
+					position: pos,
+					title: title,
+					map: map,
+					draggable: false,
+					icon: icon
+				});
+				return marker;
+			},
+		
+			createMarkerImage: function() {
+				// MarkerImage(url:string, size?:Size, origin?:Point, anchor?:Point, scaledSize?:Size)
+				var base = 'http://chart.apis.google.com/chart?';
+				var pin = 'chst=' + $('select[name="pin"]').val();
+				var icon = 'chld=' + $('select[name="icon"]').val();
+				var url = [pin, icon].join('&');
+				
+				var size = new google.maps.Size($('input[name="sizew"]').val(), $('input[name="sizeh"]').val());
+				var origin = new google.maps.Point($('input[name="originx"]').val(), $('input[name="originy"]').val());
+				var anchor = new google.maps.Point($('input[name="anchorx"]').val(), $('input[name="anchory"]').val());
+				
+				console.log('createMarkerImage. pin: ' + pin + ', icon: ' + icon);
+				console.log('createMarkerImage. size: ' + size + ', origin: ' + origin + ' , anchor: ' + anchor);
+				
+				var markerImage = new google.maps.MarkerImage(base + url, size, origin, anchor, size);
+				
+				return markerImage;
+			}
+		};
 	</script>
 </head>
 <body>
@@ -113,13 +116,13 @@
 	-->
 	<p>
 		Bubble marker settings<br />
-		anchor x: <input type="text" name="anchorx" value="0" /><br />
-		anchor y: <input type="text" name="anchory" value="0" /><br />
-		origin x: <input type="text" name="originx" value="0" /><br />
-		origin y: <input type="text" name="originy" value="0" /><br />
-		size width: <input type="text" name="sizew" value="41" /><br />
-		size height: <input type="text" name="sizeh" value="42" /><br />
-		pin type: <select name="pin">
+		anchor x: <input type="text" name=""anchorx" value="0" /><br />
+		anchor y: <input type="text" name=""anchory" value="0" /><br />
+		origin x: <input type="text" name=""originx" value="0" /><br />
+		origin y: <input type="text" name=""originy" value="0" /><br />
+		size width: <input type="text" name=""sizew" value="41" /><br />
+		size height: <input type="text" name=""sizeh" value="42" /><br />
+		pin type: <select name=""pin">
 			<option value="d_bubble_icon_text_small">d_bubble_icon_text_small</option>
 			<option value="d_map_pin_letter">d_map_pin_letter</option>
 			<option value="d_map_pin_icon">d_map_pin_icon</option>
@@ -128,7 +131,7 @@
 			<option value=""></option>
 			<option value=""></option>
 		</select><br />
-		icon:  <select name="icon">
+		icon:  <select name=""icon">
 			<option value="glyphish_paperclip">glyphish_paperclip</option>
 			<option value="pin_star|glyphish_compass|F9FBF7|ADDE63">pin_star|glyphish_compass|F9FBF7|ADDE63</option>
 			<option value=""></option>
