@@ -15,6 +15,12 @@ Javascript
 ----------
 Mostly jQuery (http://jquery.com)
 
+*Maps*
+
+ * Google Maps ()
+ * Bing Maps (http://msdn.microsoft.com/en-us/library/gg427610.aspx)
+ * Nokia Maps (http://api.maps.nokia.com/)
+
 Perl
 ----
 
