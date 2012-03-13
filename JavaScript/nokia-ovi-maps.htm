@@ -25,20 +25,27 @@
 		var mapNokia = {
 			map: null,
 			center: [60.1694, 24.9501],
-
 			infoBubbles: null,
+			searchManager: null,
+			sMarker: null,
 
 			initMap: function () {
 				// http://api.maps.nokia.com/2.1.1/apireference/symbols/nokia.maps.map.component.InfoBubbles.html
 				mapNokia.infoBubbles = new nokia.maps.map.component.InfoBubbles();
+				
+				// http://api.maps.nokia.com/2.1.1/apireference/symbols/nokia.maps.search.Manager.html
+				mapNokia.searchManager = new nokia.maps.search.Manager();
+				mapNokia.searchManager.addObserver('state', mapNokia.searchStateChange);
+				
 				console.log('infoBubbles.getVersion: ' + mapNokia.infoBubbles.getVersion());
 
 				mapNokia.map = new nokia.maps.map.Display(document.getElementById("map"), {
 					components: [
 						mapNokia.infoBubbles,
+						
 						// Behavior collection
 						new nokia.maps.map.component.Behavior(),
-						//new nokia.maps.map.component.ZoomBar(),
+						new nokia.maps.map.component.ZoomBar(),
 						//new nokia.maps.map.component.Overview(),
 						new nokia.maps.map.component.TypeSelector(),
 						//new nokia.maps.map.component.ScaleBar(),
@@ -54,20 +61,20 @@
 				//map.removeComponent(map.getComponentById("zoom.MouseWheel"));
 
 				// Create a marker and add it to the map
-				var sMarker = new nokia.maps.map.StandardMarker(mapNokia.center, {
+				mapNokia.sMarker = new nokia.maps.map.StandardMarker(mapNokia.center, {
 					text: "Hoplaa!", // Small label
 					shape: 'balloon',
 					brush: {"color": "#43A51B"},
 					draggable: true  // Make the marker draggable
 				});
-				sMarker.set('username', 'paazmaya');
-				sMarker.addListener('click', function (evt) {
+				mapNokia.sMarker.set('username', 'paazmaya');
+				mapNokia.sMarker.addListener('click', function (evt) {
 					console.log("This is the '"+evt.type+"' event!");
-					console.log(sMarker.get('username'));
+					console.log('username: ' + mapNokia.sMarker.get('username'));
 					
-					var bubble = mapNokia.infoBubbles.addBubble("hoplaa", mapNokia.center);
+					mapNokia.reverseGeo(mapNokia.sMarker.coordinate);
 				});
-				mapNokia.map.objects.add(sMarker);
+				mapNokia.map.objects.add(mapNokia.sMarker);
 
 				var marker = new nokia.maps.map.Marker(
 					new nokia.maps.geo.Coordinate(55.51, 12.4),{
@@ -79,8 +86,36 @@
 					anchor: new nokia.maps.util.Point(32, 32)
 				});
 				mapNokia.map.objects.add(marker);
+			},
+			
+			searchStateChange: function (observedManager, key, value) {
+				// If the search  has finished we can process the results
+				console.log('searchStateChange. key: ' + key + ', value: ' + value);
 				
-
+				if (value == "finished") {
+				
+					// We check that at least one location has been found
+					if (observedManager.locations.length > 0) {
+						var addr = observedManager.locations[0].address;
+						console.dir(observedManager.locations[0].address);
+						
+						var msg = [];
+						for (var i in addr) {
+							if (addr.hasOwnProperty(i)) {
+								msg.push(i + ': ' + addr[i]);
+							}
+						}
+						
+						var bubble = mapNokia.infoBubbles.addBubble(msg.join('<br />'), mapNokia.sMarker.coordinate);
+					}
+				} 
+				else if (value == "failed") {
+					console.log("The search request failed.");
+				}
+			},
+			
+			reverseGeo: function (loc) {
+				mapNokia.searchManager.reverseGeocode(loc);
 			}
 		};
 
