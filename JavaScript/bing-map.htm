@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Bing Map pin problem</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="icon" type="image/ico" href="/favicon.ico" />
+	<style type="text/css">
+		html, body, #map { height:100%; margin:0; padding:0; }
+		body { height: 100%; overflow: hidden; background-color: #1E0E0E; color: White; }
+		a { color: White; }
+		#map { width: 100%; height: 100%; overflow: hidden; }
+	</style>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+	<script type="text/javascript">
+		var positions = [	
+			{ lat: 60.1753, lng: 24.9433, when: 1303276611, user: "paazmaya" }
+		];
+		var map = null;
+		var infoBoxes = [];
+		
+		var interval = 20 * 1000;
+		var opts = {
+			credentials: "AkvJBHQXkVDCLiXF0_jf-9uKp4-v5qUdrwvlHsoNowPa7USau6ChPteKIJagiVKs",
+			mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(60.1743, 24.9833),
+			zoom: 14
+		};
+
+		// Bing Maps AJAX Control, Version 7.0
+		// http://msdn.microsoft.com/en-us/library/gg427610.aspx
+
+		$(document).ready(function() {
+		
+			map = new Microsoft.Maps.Map(document.getElementById("map"), opts);
+			Microsoft.Maps.Events.addHandler(map, 'viewchange', hideBoxes);
+			
+			var len = positions.length;
+			for (var i = 0; i < len; ++i) {
+				var p = positions[i];
+				console.log(i + " - p.lat: " + p.lat + ", p.lng: " + p.lng + ", p.when: " + p.when);
+				// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
+				var d = new Date(p.when * 1000);
+				var loc = new Microsoft.Maps.Location(p.lat, p.lng);
+				var pin = new Microsoft.Maps.Pushpin(loc, {
+					draggable: false,
+					text: d.toString()
+				}); 
+
+				Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
+
+				map.entities.push(pin);
+			}
+			
+		});
+
+		function displayInfobox(e) {
+			if (e.targetType == 'pushpin') {
+				var loc = e.target.getLocation();
+				var box = new Microsoft.Maps.Infobox(loc, {
+					description: e.target.getText(),
+					visible: true
+				});
+				infoBoxes.push(box);
+				map.entities.push(box);
+			}
+		}
+
+		function hideBoxes(e) {
+			if (infoBoxes.length > 0) {
+				var i = map.entities.indexOf(infoBoxes[0]);
+				if (i !== -1) {
+					map.entities.removeAt(i);
+				}
+			}
+		}
+		
+	</script>
+</head>
+<body>
+	<div id="map">
+	</div>
+</body>
+</html>
