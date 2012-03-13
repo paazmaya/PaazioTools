@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bing Map pin problem</title>
+	<title>Bing Maps</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 	<link rel="icon" type="image/ico" href="/favicon.ico" />
@@ -11,21 +11,21 @@
 		a { color: White; }
 		#map { width: 100%; height: 100%; overflow: hidden; }
 	</style>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
 	<script type="text/javascript">
 		var positions = [	
 			{ lat: 60.1753, lng: 24.9433, when: 1303276611, user: "paazmaya" }
 		];
-		var map = null;
-		var infoBoxes = [];
 		
 		var interval = 20 * 1000;
 		var opts = {
 			credentials: "AkvJBHQXkVDCLiXF0_jf-9uKp4-v5qUdrwvlHsoNowPa7USau6ChPteKIJagiVKs",
 			mapTypeId: Microsoft.Maps.MapTypeId.road,
             center: new Microsoft.Maps.Location(60.1743, 24.9833),
-			zoom: 14
+			zoom: 14,
+			backgroundColor: '#A4F2CC',
+			fixedMapPosition: true
 		};
 
 		// Bing Maps AJAX Control, Version 7.0
@@ -33,48 +33,97 @@
 
 		$(document).ready(function() {
 		
-			map = new Microsoft.Maps.Map(document.getElementById("map"), opts);
-			Microsoft.Maps.Events.addHandler(map, 'viewchange', hideBoxes);
+			bing.map = new Microsoft.Maps.Map(document.getElementById('map'), opts);
+			Microsoft.Maps.Events.addHandler(bing.map, 'viewchange', bing.removeInfoBoxes);
+			
+			console.log('Microsoft.Maps.Map.getVersion(): ' + Microsoft.Maps.Map.getVersion());
 			
 			var len = positions.length;
 			for (var i = 0; i < len; ++i) {
 				var p = positions[i];
 				console.log(i + " - p.lat: " + p.lat + ", p.lng: " + p.lng + ", p.when: " + p.when);
-				// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
-				var d = new Date(p.when * 1000);
 				var loc = new Microsoft.Maps.Location(p.lat, p.lng);
+				
+				// http://msdn.microsoft.com/en-us/library/gg427629.aspx
 				var pin = new Microsoft.Maps.Pushpin(loc, {
 					draggable: false,
-					text: d.toString()
+					text: p.user.charAt(0).toUpperCase()
 				}); 
 
-				Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
+				Microsoft.Maps.Events.addHandler(pin, 'click', bing.pinClick);
+				Microsoft.Maps.Events.addHandler(pin, 'dragend', bing.pinDragend);
 
-				map.entities.push(pin);
+				bing.map.entities.push(pin);
 			}
 			
 		});
+		
+		var bing = {
+			map: null,
+		
+			pinClick: function (event) {
+				if (event.targetType == 'pushpin') {
+					var loc = event.target.getLocation();
+					bing.displayInfobox(loc);
+				}
+			},
+			
+			pinDragend: function (event) {
+				if (event.targetType == 'pushpin') {
+					var loc = event.target.getLocation();
+					console.log('pushpin loc: ' + loc.latitude + ', ' + loc.longitude);
+				}
+			},
+			
+			/**
+			 * Get information fo this location pin
+			 */
+			getPosition: function (loc) {
+				var obj = null;
+				var len = positions.length;
+				for (var i = 0; i < len; ++i) {
+					var p = positions[i];7
+					if (loc.latitude == p.lat && loc.longitude == p.lng) {
+						obj = p;
+						break;
+					}
+				}
+				return obj;
+			},
 
-		function displayInfobox(e) {
-			if (e.targetType == 'pushpin') {
-				var loc = e.target.getLocation();
+			displayInfobox: function (loc) {
+				var p = bing.getPosition(loc);
+				if (p == null) {
+					return false;
+				}
+				console.dir(p);
+				// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
+				var d = new Date(p.when * 1000);
+				
 				var box = new Microsoft.Maps.Infobox(loc, {
-					description: e.target.getText(),
+					title: p.user,
+					description: d.toString(),
 					visible: true
 				});
-				infoBoxes.push(box);
-				map.entities.push(box);
-			}
-		}
+				bing.map.entities.push(box);
+			},
 
-		function hideBoxes(e) {
-			if (infoBoxes.length > 0) {
-				var i = map.entities.indexOf(infoBoxes[0]);
-				if (i !== -1) {
-					map.entities.removeAt(i);
+			// http://msdn.microsoft.com/en-us/library/gg427616.aspx
+			removeInfoBoxes: function (event) {
+				var len = bing.map.entities.getLength();
+				console.log('removeInfoBoxes. len: ' + len);
+				
+				for (var i = 0; i < len; ++i) {
+					var ent = bing.map.entities.get(i);
+					console.log('removeInfoBoxes. i: ' + i + ', getTypeName: ' + ent.getTypeName());
+					//console.dir(ent);
+	
+					if (ent.getTypeName() == 'Infobox') {
+						bing.map.entities.removeAt(i);
+					}
 				}
 			}
-		}
+		};
 		
 	</script>
 </head>
