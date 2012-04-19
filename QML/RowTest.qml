@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 
 /**
  * Row organises its child items to a row

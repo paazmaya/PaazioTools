@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 
 /**
  * Column organises its child items to a column.
@@ -10,13 +10,19 @@ Rectangle {
 
 	Column {
 		spacing: 2
-		Rectangle { color: "red"; width: 50; height: 50 }
-		Rectangle { color: "green"; width: 20; height: 50 }
-		Rectangle { color: "blue"; width: 50; height: 20 }
+        Repeater {
+            model: 6
+            Rectangle {
+                color: Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
+                width: 30 + Math.random() * 200
+                height: 50
+            }
+        }
 		move: Transition {
 			NumberAnimation {
 				properties: "y"
 				easing.type: "OutBounce"
+                duration: 600
 			}
 		}
 	}

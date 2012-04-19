@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 
 /**
  * Demonstrates the use of the Flipable display item.

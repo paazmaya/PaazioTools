@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 
 /**
  * Flow arranges items...
@@ -25,8 +25,7 @@ Rectangle {
 	focus: true
 	Keys.onReleased: {
         if (event.key == Qt.Key_Space) {
-            var item = Qt.createQmlObject('; Rectangle {}',
-                flow, "item");
+            var item = Qt.createQmlObject('import QtQuick 1.1; Rectangle {}', flow, "item");
             item.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
             item.width = Math.random() * 80 + 20;
             item.height = Math.random() * 80 + 20;
