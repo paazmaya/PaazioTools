@@ -1,35 +1,29 @@
-import QtQuick 1.1
+/* PinchingFlickable.qml */
+import QtQuick 2.0
 
 Rectangle {
+    id: main
+
+    property real itemHeight: 50
+
     color: "#11262B"
     width: 480
     height: 848
 
-    Text {
-        id: log
-        anchors.fill: parent
-        anchors.margins: 10
-        font.pointSize: 12
-        color: "snow"
-    }
-
     Flickable {
         id: flickArea
-
         anchors.fill: parent
         contentHeight: col.height
-        opacity: 0.5 // so the log can be seen
 
         PinchArea {
+            property real initHeight: 0
+
             anchors.fill: parent
-            onPinchFinished: {
-                log.text += "PinchArea onPinchFinished" + "\n"
-            }
             onPinchStarted: {
-                log.text += "PinchArea onPinchStarted" + "\n"
+                initHeight = main.itemHeight
             }
             onPinchUpdated: {
-                log.text += "PinchArea onPinchUpdated" + "\n"
+                main.itemHeight = initHeight * pinch.scale
             }
 
             Column {
@@ -37,18 +31,19 @@ Rectangle {
                 spacing: 10
 
                 Repeater {
-                    model: 20
+                    model: 200
 
                     Rectangle {
                         width: flickArea.width
-                        height: 50
+                        height: main.itemHeight
                         color: Qt.rgba(Math.random(),
                             Math.random(), Math.random(), 1)
 
                         Text {
                             anchors.centerIn: parent
-                            text: index
+                            text: "Item at position: " + index
                             font.pointSize: 16
+                            color: "snow"
                         }
 
                         MouseArea {
