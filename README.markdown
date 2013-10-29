@@ -47,3 +47,7 @@ Qt Quick has a huge promise and it seems that it might be able to keep it
 Scripts
 -------
 Random scripts for anything that is not big enough for its own root folder...
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/paazmaya/paaziotools/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
