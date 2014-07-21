@@ -1,5 +1,0 @@
-for a in *.as
-do
-  unexpand -t 4 $a >$a-notab
-  mv $a-notab $a
-done
