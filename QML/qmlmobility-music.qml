@@ -1,5 +1,5 @@
 // qmlmobility-music.qml
-import QtQuick 1.1
+import QtQuick 2.2
 import QtMobility.gallery 1.1
 import QtMultimediaKit 1.1
 

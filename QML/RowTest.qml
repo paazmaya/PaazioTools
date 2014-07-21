@@ -1,8 +1,8 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 /**
  * Row organises its child items to a row
- * http://doc.qt.nokia.com/4.7/qml-row.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-row.html
  */
 Rectangle {
 	width: 800
@@ -10,7 +10,7 @@ Rectangle {
 
 	Component.onCompleted: {
 		for (var i = 0; i < 50; ++i) {
-			var item = Qt.createQmlObject('; Rectangle {}',
+            var item = Qt.createQmlObject('import QtQuick 2.2; Rectangle {}',
 				positioner, "item" + i);
             item.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
             item.width = Math.random() * 30 + 10;

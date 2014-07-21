@@ -1,9 +1,9 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 
 /**
  * pathView
- * http://doc.qt.nokia.com/4.7/qml-pathview.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-pathview.html
  */
 Rectangle {
 	id: main

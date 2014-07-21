@@ -1,6 +1,5 @@
 /* MultiPointArea.qml */
-// http://doc.qt.nokia.com/qt5/qtquick-2.html
-import QtQuick 2.0
+import QtQuick 2.2
 
 Rectangle {
     id: main
@@ -70,7 +69,7 @@ Rectangle {
         }
     }
 
-    // http://doc.qt.nokia.com/qt5/qml-qtquick2-multipointtoucharea.html
+    // http://qt-project.org/doc/qt-5/qml-qtquick-multipointtoucharea.html
     MultiPointTouchArea {
         id: multiArea
 
@@ -89,7 +88,7 @@ Rectangle {
         maximumTouchPoints: 5
 
         // Each of the event handlers have "touchPoints" available
-        // http://doc.qt.nokia.com/qt5/qml-qtquick2-touchpoint.html
+        // http://qt-project.org/doc/qt-5/qml-qtquick-touchpoint.html
         onCanceled: {
             console.log("multiArea onCanceled.")
             points = touchPoints;

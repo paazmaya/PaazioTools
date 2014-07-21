@@ -1,8 +1,8 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 /**
  * Demonstrates the use of the Flipable display item.
- * http://doc.qt.nokia.com/4.7/qml-flipable.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-flipable.html
  */
 Rectangle {
 	width: 800

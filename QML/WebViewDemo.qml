@@ -9,9 +9,10 @@ Flickable {
 	contentHeight: web.height
     WebView {
         id: web
-        url: "http://qt.nokia.com" 
+        url: "http://qt-project.org"
         onLoadFinished: {
-            flick.contentY += 1; 
+            flick.contentY += 1;
+            web.evaluateJavaScript('console.log("Hi there!")');
         }
 		javaScriptWindowObjects: QtObject {
 			id: testQObject
@@ -19,6 +20,4 @@ Flickable {
 			WebView.windowObjectName: 'data'
 		}
     }
-	myWebView.evaluateJavaScript('console.log("Hi there!")')
-} 
-
+}

@@ -1,8 +1,8 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 /**
  * GridView
- * http://doc.qt.nokia.com/4.7/qml-gridview.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-gridview.html
  */
 Rectangle {
 	width: 800

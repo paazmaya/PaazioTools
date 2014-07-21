@@ -1,5 +1,5 @@
 /* PinchingMouseArea.qml */
-import QtQuick 1.1
+import QtQuick 2.2
 
 Rectangle {
     color: "#11262B"

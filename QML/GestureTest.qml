@@ -1,10 +1,10 @@
-import QtQuick 1.1
+import QtQuick 2.2
 import Qt.labs.gestures 2.0
 
 /**
  * Gestures provide the missing functionality
  * over MouseArea which are used in mobile devices.
- * http://doc.qt.nokia.com/4.7/qml-gesturearea.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-gesturearea.html
  */
 Rectangle {
     id: main

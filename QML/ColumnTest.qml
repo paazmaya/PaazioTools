@@ -1,8 +1,8 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 /**
  * Column organises its child items to a column.
- * http://doc.qt.nokia.com/4.7/qml-column.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-column.html
  */
 Rectangle {
 	width: 800

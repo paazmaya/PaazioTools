@@ -1,9 +1,9 @@
-import QtQuick 1.1
+import QtQuick 2.2
 import QtWebKit 1.0
 
 /**
  * Web view is used as a browser window
- * http://doc.qt.nokia.com/4.7/qml-webview.html
+ * http://qt-project.org/doc/qt-5/qml-qtquick-webview.html
  */
 Rectangle {
 	width: 840
@@ -19,7 +19,7 @@ Rectangle {
 			id: webView
 			anchors.fill: parent
 
-			url: "http://nokia.com/"
+            url: "http://qt-project.org/"
 			smooth: true
 
 			settings.pluginsEnabled: true
