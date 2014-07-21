@@ -11,4 +11,3 @@ $extensions = 'php,inc'; // Check only files having php or inc extension
 // phpcs --extensions=$extensions
 
 $sniff = new PHP_CodeSniffer(1, 4);
-?>
