@@ -3,6 +3,9 @@ PaazioTools
 Studies, trials and snippets in several scripting and programming languages.
 All the code is under Creative Commons License - Attribution & Share Alike (http://creativecommons.org/licenses/by-sa/3.0/).
 
+[![Analytics](https://ga-beacon.appspot.com/UA-2643697-15/PaazioTools/index)](https://github.com/igrigorik/ga-beacon)
+
+
 AS3
 ---
 Actionscript 3, 2 and Flash authoring tool formats
@@ -24,7 +27,7 @@ Mostly jQuery (http://jquery.com)
 Perl
 ----
 
-Photoshop, Adobe 
+Photoshop, Adobe
 ----------------
 These are Javascript based scripts for versions CS2 and up.
 
@@ -39,7 +42,7 @@ Most likely the most active section
 
 
 QML
---- 
+---
 Qt Quick has a huge promise and it seems that it might be able to keep it
 
 
