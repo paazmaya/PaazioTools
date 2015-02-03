@@ -3,7 +3,7 @@ PaazioTools
 Studies, trials and snippets in several scripting and programming languages.
 All the code is under Creative Commons License - Attribution & Share Alike (http://creativecommons.org/licenses/by-sa/3.0/).
 
-[![Analytics](https://ga-beacon.appspot.com/UA-2643697-15/PaazioTools/index)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-2643697-15/PaazioTools/index?flat)](https://github.com/igrigorik/ga-beacon)
 
 
 AS3
