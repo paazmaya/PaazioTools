@@ -52,5 +52,6 @@ Scripts
 Random scripts for anything that is not big enough for its own root folder...
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/paazmaya/paaziotools/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+## Contributing
 
+[Please refer to a GitHub blog post on how to create somewhat perfect pull request.](https://github.com/blog/1943-how-to-write-the-perfect-pull-request "How to write the perfect pull request")
