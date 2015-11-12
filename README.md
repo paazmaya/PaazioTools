@@ -51,6 +51,9 @@ Scripts
 -------
 Random scripts for anything that is not big enough for its own root folder...
 
+## License
+
+Copyright (c) [Juga Paazmaya <paazmaya@yahoo.com>](http://paazmaya.fi)
 
 ## Contributing
 
