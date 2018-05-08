@@ -1,1 +1,0 @@
-function randchr(){ return String((new Date()).getTime()).replace(/\D/gi,'') }
