@@ -1,0 +1,17 @@
+{
+  "name": "webdriver",
+  "version": "1.0.0",
+  "description": "Fetch test suites from GhostInspector",
+  "main": "ghostinspector.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=8.11.1"
+  },
+  "author": "Juga Paazmaya <paazmaya@yahoo.com> (https://paazmaya.fi)",
+  "license": "ISC",
+  "dependencies": {
+    "ghost-inspector": "^4.0.0"
+  }
+}
