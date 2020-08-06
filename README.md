@@ -3,10 +3,8 @@
 Studies, trials and snippets in several scripting and programming languages.
 All the code is under Creative Commons License - Attribution & Share Alike (http://creativecommons.org/licenses/by-sa/3.0/).
 
-[![Analytics](https://ga-beacon.appspot.com/UA-2643697-15/PaazioTools/index?flat)](https://github.com/igrigorik/ga-beacon)
 
-
-##AS3
+## AS3
 
 Actionscript 3, 2 and Flash authoring tool formats
 
@@ -14,7 +12,7 @@ Actionscript 3, 2 and Flash authoring tool formats
 
 Cascaded Style Sheets
 
-## Javascript
+## JavaScript
 
 Mostly jQuery (http://jquery.com)
 
